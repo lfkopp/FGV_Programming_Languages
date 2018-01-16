@@ -31,6 +31,6 @@ while max(pos)<pista:
         print("\033[1;%s;%sm%s\033[0m" % (cor,40+y,str(y+1) +  (' ' * pos[y]) +"0o"+  (' ' * (pista-pos[y]))))
         print("\033[1;%s;%sm%s\033[0m" % (cor,40+y,str(' ' * (pista+3))))
     time.sleep(0.05)
-
-
+   
+    
 print("o ganhador foi o cavalo " + str(ganhador))
