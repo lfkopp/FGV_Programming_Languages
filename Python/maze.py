@@ -48,6 +48,7 @@ def move(m,a,b,resposta=[]):
     if itc > 0:
         itc -= 1
         resposta.append([a,b])
+        ## possivel rua sem saida aqui
     else:
         return 0
     if 99 in vizinho(m,a,b):
