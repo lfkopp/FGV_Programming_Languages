@@ -37,27 +37,29 @@ while m.any() != 99:
         m[c,d] = 99
         break
 
+mm = m.copy()
 
 def vizinho(m,a,b):
     return [m[a-1,b],m[a,b-1],m[a,b+1],m[a+1,b]]
 
 itc = 10000
-resposta_fim = []
 def move(m,a,b,resposta=[]):
     global itc
+    global resposta_fim
     if itc > 0:
         itc -= 1
         resposta.append([a,b])
-        ## possivel rua sem saida aqui
     else:
-        return 0
+        return m,resposta
     if 99 in vizinho(m,a,b):
         print("solução encontrada")
-        print(resposta)
+        #print(resposta)
+        resposta_fim = resposta
         return m,resposta
     else:
         minimo = min(vizinho(m,a,b))
         proximo = vizinho(m,a,b).index(minimo)
+        #print(vizinho(m,a,b),minimo,proximo)
         if minimo < 98:
             if proximo == 0:
                 m[a-1,b] = max(40,m[a-1,b]+1)
@@ -79,6 +81,23 @@ m2 = move(m,a,b)
 
 fig, ax = plt.subplots(figsize = (10,10))
 ax.matshow(m, cmap=plt.cm.Blues)
+#ax.grid(color='b', linestyle='-', linewidth=1)
+plt.xticks([]), plt.yticks([])
+plt.show()
+
+
+
+for casa in range(len(resposta_fim)):
+    for visita in range(casa+1,len(resposta_fim)):
+        if resposta_fim[casa] == resposta_fim[visita]:
+            resposta_fim = resposta_fim[:casa] + resposta_fim[visita:]
+            break
+
+for x in resposta_fim:
+    mm[x[0],x[1]]=50
+
+fig, ax = plt.subplots(figsize = (10,10))
+ax.matshow(mm, cmap=plt.cm.Blues)
 #ax.grid(color='b', linestyle='-', linewidth=1)
 plt.xticks([]), plt.yticks([])
 plt.show()
