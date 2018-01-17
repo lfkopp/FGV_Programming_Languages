@@ -86,9 +86,8 @@ plt.xticks([]), plt.yticks([])
 plt.show()
 
 
-
 for casa in range(len(resposta_fim)):
-    for visita in range(casa+1,len(resposta_fim)):
+    for visita in range(len(resposta_fim)-1,casa,-1):
         if resposta_fim[casa] == resposta_fim[visita]:
             resposta_fim = resposta_fim[:casa] + resposta_fim[visita:]
             break
