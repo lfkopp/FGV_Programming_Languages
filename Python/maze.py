@@ -23,80 +23,85 @@ def maze(width=81, height=81):
                     x, y = b, a
     return Z
 
-m = maze(17,17)
+m = maze(15,15)  # tamanho do maze
 
 while m.any() != 98:
-    a,b = rand(0, m.shape[1]), rand(0, m.shape[0] )
+    a,b = rand(1, m.shape[0]-1), rand(1, m.shape[1]-1)
     if m[a,b] == 0:
         m[a,b] = 98
         break
-
+        
 while m.any() != 99:
-    c,d = rand(0, m.shape[1]), rand(0, m.shape[0] )
+    c,d = rand(1, m.shape[0]-1), rand(1, m.shape[1]-1)
     if m[c,d] == 0:
         m[c,d] = 99
         break
-
-mm = m.copy()
-
+        
 def vizinho(m,a,b):
     return [m[a-1,b],m[a,b-1],m[a,b+1],m[a+1,b]]
 
-itc = 10000
-def move(m,a,b,resposta=[]):
+def zeros(l):
+    result = []
+    for index, item in enumerate(l):
+        if item == 0: result.append(index)
+    return result
+
+
+
+resposta_fim = []
+
+def move(m,a,b,resultado):
     global itc
+    itc = 100000
     global resposta_fim
     if itc > 0:
-        itc -= 1
-        resposta.append([a,b])
-    else:
-        return m,resposta
-    if 99 in vizinho(m,a,b):
-        print("solução encontrada")
-        #print(resposta)
-        resposta_fim = resposta
-        return m,resposta
-    else:
-        minimo = min(vizinho(m,a,b))
-        proximo = vizinho(m,a,b).index(minimo)
-        #print(vizinho(m,a,b),minimo,proximo)
-        if minimo < 98:
-            if proximo == 0:
-                m[a-1,b] = max(40,m[a-1,b]+1)
-                move(m,a-1,b)
-            if proximo == 1:
-                m[a,b-1] = max(40,m[a,b-1]+1)
-                move(m,a,b-1)
-            if proximo == 2:
-                m[a,b+1] = max(40,m[a,b+1]+1)
-                move(m,a,b+1)
-            if proximo == 3:
-                m[a+1,b] = max(40,m[a+1,b]+1)
-                move(m,a+1,b)
+        if 99 in vizinho(m,a,b):
+            if resposta_fim == [] or len(resultado)<len(resposta_fim):
+                resposta_fim = resultado.copy()
+                #print(resultado)
+                return m,resposta_fim
+        else:
+            proximo = zeros(vizinho(m,a,b))
+            itc -= 1
+            if len(proximo) > 0:
+                if 0 in proximo:
+                    mm = m.copy()
+                    mm[a-1,b] = max(40,m[a-1,b]+1)
+                    r = resultado.copy()
+                    r.append([a-1,b])
+                    move(mm,a-1,b,r)
+                if 1 in proximo:
+                    mm = m.copy()
+                    mm[a,b-1] = max(40,m[a,b-1]+1)
+                    r = resultado.copy()
+                    r.append([a,b-1])
+                    move(mm,a,b-1,r)
+                if 2 in proximo:
+                    mm = m.copy()
+                    mm[a,b+1] = max(40,mm[a,b+1]+1)
+                    r = resultado.copy()
+                    r.append([a,b+1])
+                    move(mm,a,b+1,r)
+                if 3 in proximo:
+                    mm = m.copy()
+                    mm[a+1,b] = max(40,mm[a+1,b]+1)
+                    r = resultado.copy()
+                    r.append([a+1,b])
+                    move(mm,a+1,b,r)
 
-            
-            
-m2 = move(m,a,b)
+move(m,a,b,[])
 
+if len(resposta_fim)>0:
+    for c in resposta_fim:
+        m[c[0]][c[1]] = 40
+else:
+    print("não encontrada solução com " + str(itc) + " iterações")
 
 fig, ax = plt.subplots(figsize = (10,10))
 ax.matshow(m, cmap=plt.cm.Blues)
-#ax.grid(color='b', linestyle='-', linewidth=1)
 plt.xticks([]), plt.yticks([])
 plt.show()
 
-
-for casa in range(len(resposta_fim)):
-    for visita in range(len(resposta_fim)-1,casa,-1):
-        if resposta_fim[casa] == resposta_fim[visita]:
-            resposta_fim = resposta_fim[:casa] + resposta_fim[visita:]
-            break
-
-for x in resposta_fim:
-    mm[x[0],x[1]]=50
-
-fig, ax = plt.subplots(figsize = (10,10))
-ax.matshow(mm, cmap=plt.cm.Blues)
-#ax.grid(color='b', linestyle='-', linewidth=1)
-plt.xticks([]), plt.yticks([])
-plt.show()
+'''
+falta fazer um controle para só deixar seguir os caminhos que são menores que uma solução existente
+'''
