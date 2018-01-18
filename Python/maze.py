@@ -23,7 +23,7 @@ def maze(width=81, height=81):
                     x, y = b, a
     return Z
 
-m = maze(15,15)  # tamanho do maze
+m = maze(51,31)  # tamanho do maze
 
 while m.any() != 98:
     a,b = rand(1, m.shape[0]-1), rand(1, m.shape[1]-1)
@@ -46,8 +46,6 @@ def zeros(l):
         if item == 0: result.append(index)
     return result
 
-
-
 resposta_fim = []
 
 def move(m,a,b,resultado):
@@ -69,25 +67,25 @@ def move(m,a,b,resultado):
                     mm[a-1,b] = max(40,m[a-1,b]+1)
                     r = resultado.copy()
                     r.append([a-1,b])
-                    move(mm,a-1,b,r)
+                    if len(resposta_fim) == 0 or len(r) < len(resposta_fim): move(mm,a-1,b,r)
                 if 1 in proximo:
                     mm = m.copy()
                     mm[a,b-1] = max(40,m[a,b-1]+1)
                     r = resultado.copy()
                     r.append([a,b-1])
-                    move(mm,a,b-1,r)
+                    if len(resposta_fim) == 0 or len(r) < len(resposta_fim): move(mm,a,b-1,r)
                 if 2 in proximo:
                     mm = m.copy()
                     mm[a,b+1] = max(40,mm[a,b+1]+1)
                     r = resultado.copy()
                     r.append([a,b+1])
-                    move(mm,a,b+1,r)
+                    if len(resposta_fim) == 0 or len(r) < len(resposta_fim): move(mm,a,b+1,r)
                 if 3 in proximo:
                     mm = m.copy()
                     mm[a+1,b] = max(40,mm[a+1,b]+1)
                     r = resultado.copy()
                     r.append([a+1,b])
-                    move(mm,a+1,b,r)
+                    if len(resposta_fim) == 0 or len(r) < len(resposta_fim): move(mm,a+1,b,r)
 
 move(m,a,b,[])
 
@@ -97,11 +95,7 @@ if len(resposta_fim)>0:
 else:
     print("não encontrada solução com " + str(itc) + " iterações")
 
-fig, ax = plt.subplots(figsize = (10,10))
+fig, ax = plt.subplots(figsize = (15,10))
 ax.matshow(m, cmap=plt.cm.Blues)
 plt.xticks([]), plt.yticks([])
 plt.show()
-
-'''
-falta fazer um controle para só deixar seguir os caminhos que são menores que uma solução existente
-'''
