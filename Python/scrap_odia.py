@@ -4,4 +4,4 @@
 ## https://www.odia.com.br/json/top/
 ## http://s0.ejesa.ig.com.br/json/odia/rates/
 ## http://browse.ejesa.igcorp.com.br/odia.ig.com.br/
-
+## https://odia.ig.com.br/index.php?id=/_templates/webparts/page.php&site=82&sesit=7&p=3000
